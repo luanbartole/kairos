@@ -187,7 +187,7 @@ this will be a CLI application, local-only, with the following components.
    └────────┬────────────┘
             │
    ┌────────▼──────────┐
-   │  Output Formatter │ ← tabulate (tables) or pandas
+   │  Output Formatter │ ← rich (tables)
    └───────────────────┘
 
 ```
@@ -202,9 +202,7 @@ I will use Python as the programming language and a local file (CSV or JSON) to 
 - `os` to handle file paths, check file existence, default export directories.
 - `json` save/load logs in JSON format.
 - `csv` to save logs in csv format.
-- `rich` to format the summary tables in the terminal.
-
-Since I want a very minimal tool, I will avoid non-stdlib dependencies.
+- `rich` to format the summary tables in the terminal. _[external library = needs installing]_
 
 
 

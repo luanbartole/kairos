@@ -67,7 +67,7 @@ class TerminalDisplay:
         summary = {}
 
         for session in week_sessions:
-            tag = session.get("tag", "-")
+            tag = session.get("tag", "general")
             date_obj = datetime.strptime(session["date"], "%Y-%m-%d")
             weekday = weekdays[date_obj.weekday()]
             duration_str = session.get("duration", "00:00")

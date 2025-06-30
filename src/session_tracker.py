@@ -26,28 +26,35 @@ class SessionTracker:
         Args:
             task (str): Task description.
             tag (str): Optional tag for the session.
+
+        Returns:
+            str: Confirmation message.
         """
-        print(f'Starting timer for task [{task}] with tag [{tag.lower()}]')
         now = datetime.now()
         session = {
             'date': now.strftime('%Y-%m-%d'),
             'start': now.strftime('%H:%M'),
             'task': task,
-            'tag': tag.lower()
+            'tag': tag.lower() if tag else "general"
         }
         with open(self.current_file, 'w') as f:
             json.dump(session, f, indent=2)
+        return f"Started timer for task: {task} (tag: {session['tag']})"
 
     def stop(self):
         """
         Stop the current session, calculate duration,
         save it to the log, and delete the current session file.
+
+        Returns:
+            str: Confirmation message.
+
+        Raises:
+            FileNotFoundError: If no active timer is found.
         """
         if not os.path.exists(self.current_file):
-            print('No active timer found. Start a timer first using the \'start\' command.')
-            return
+            raise FileNotFoundError("No active timer found. Start a timer first using the 'start' command.")
 
-        print('Stopping current timer.')
         now = datetime.now()
         with open(self.current_file) as f:
             session = json.load(f)
@@ -67,8 +74,9 @@ class SessionTracker:
         })
 
         self._save_to_logbook(session)
-        print(f'Session saved: {session["task"]} [{session["duration"]}]')
         os.remove(self.current_file)
+
+        return f"Session saved: {session['task']} — duration: {session['duration']}"
 
     # ─── Helper Method ────────────────────────────────────────────────
 
@@ -101,46 +109,32 @@ class SessionTracker:
         Args:
             format (str): 'csv' or 'json'.
             output (str): Output filename or path.
+
+        Returns:
+            str: Export success message.
+
+        Raises:
+            FileNotFoundError: If no sessions found to export.
+            FileNotFoundError: If output directory doesn't exist.
         """
         data = self.get_sessions()
         if not data:
-            print('No sessions to export.')
-            return
+            raise FileNotFoundError("No sessions to export.")
 
         default_name = 'session_export.json' if format == 'json' else 'session_export.csv'
         output_path = Path(output or default_name)
 
-        if not self._confirm_output_path(output_path):
-            return
+        if not output_path.parent.exists():
+            raise FileNotFoundError(f'Directory "{output_path.parent}" does not exist.')
 
         if format == 'csv':
             self._write_csv(data, output_path)
         else:
             self._write_json(data, output_path)
 
-        print(f'{format.upper()} export completed: {output_path}')
+        return f"{format.upper()} export completed: {output_path}"
 
     # ─── Helper Methods ────────────────────────────────────────────────
-
-    def _confirm_output_path(self, path):
-        """
-        Check or create output directory; prompt user if missing.
-
-        Args:
-            path (Path): Output file path.
-
-        Returns:
-            bool: True if path is valid, else False.
-        """
-        if not path.parent.exists():
-            confirm = input(f'Directory "{path.parent}" does not exist. Create it? (y/n): ').strip().lower()
-            if confirm == 'y':
-                path.parent.mkdir(parents=True, exist_ok=True)
-                return True
-            else:
-                print("Export cancelled")
-                return False
-        return True
 
     def _write_csv(self, data, path):
         """

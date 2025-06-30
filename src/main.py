@@ -11,10 +11,6 @@ def handle_summary(args):
         print("Showing weekly's summary.")
 
 
-def handle_export(args):
-    print(f"Exporting logs as {args.format} to {args.output or 'default file'}")
-
-
 # Create the main parser
 parser = argparse.ArgumentParser(
     prog="kairos",
@@ -44,9 +40,9 @@ summary_parser.set_defaults(func=handle_summary)
 
 # ---- EXPORT ----
 export_parser = subparsers.add_parser("export", help="Export logs to CSV or JSON")
-export_parser.add_argument("--format", choices=["csv", "json"], default="csv", help="Export format")
+export_parser.add_argument("--format", choices=["csv", "json"], default="json", help="Export format")
 export_parser.add_argument("--output", help="Path or filename to export the logs")
-export_parser.set_defaults(func=handle_export)
+export_parser.set_defaults(func=lambda args: tracker.export(args.format, args.output))
 
 
 def main():

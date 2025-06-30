@@ -81,7 +81,7 @@ class SessionTracker:
         """
         Export saved sessions to CSV or JSON.
         """
-        data = self._load_sessions()
+        data = self.get_sessions()
         if not data:
             print('No sessions to export.')
             return
@@ -98,18 +98,6 @@ class SessionTracker:
             self._write_json(data, output_path)
 
         print(f'{format.upper()} export completed: {output_path}')
-
-    def _load_sessions(self):
-        """
-        Load sessions from log file; return empty list if missing/corrupted.
-        """
-        if not os.path.exists(self.all_file):
-            return []
-        try:
-            with open(self.all_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            return []
 
     def _confirm_output_path(self, path):
         """
@@ -140,3 +128,15 @@ class SessionTracker:
         """
         with open(path, 'w', encoding='utf-8') as json_file:
             json.dump(data, json_file, indent=2)
+
+    def get_sessions(self):
+        """
+        Load sessions from log file; return empty list if missing/corrupted.
+        """
+        if not os.path.exists(self.all_file):
+            return []
+        try:
+            with open(self.all_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            return []

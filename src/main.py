@@ -1,14 +1,23 @@
 import argparse
 from src.session_tracker import SessionTracker
+from src.terminal_display import TerminalDisplay
 
 tracker = SessionTracker()
-
+display = TerminalDisplay()
 
 def handle_summary(args):
+    data = tracker.get_sessions()
+    if not data:
+        print("No sessions found.")
+        return
+
+
     if args.today:
-        print("Showing today's summary.")
+        display.render_today_summary(data)
+        print()
     elif args.week:
-        print("Showing weekly's summary.")
+        display.render_weekly_summary(data)
+        print()
 
 
 # Create the main parser

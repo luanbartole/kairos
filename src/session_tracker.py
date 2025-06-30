@@ -11,12 +11,22 @@ class SessionTracker:
     """
 
     def __init__(self, current_file='current_session.json', all_file='sessions.json'):
-        """Initialize file paths for current and all sessions."""
+        """
+        Args:
+            current_file (str): Path for the current active session file.
+            all_file (str): Path for the logbook file containing all sessions.
+        """
         self.current_file = current_file
         self.all_file = all_file
 
     def start(self, task, tag):
-        """Start a new session timer for a task with an optional tag."""
+        """
+        Start a new session timer for a task with an optional tag.
+
+        Args:
+            task (str): Task description.
+            tag (str): Optional tag for the session.
+        """
         print(f'Starting timer for task [{task}] with tag [{tag.lower()}]')
         now = datetime.now()
         session = {
@@ -60,9 +70,14 @@ class SessionTracker:
         print(f'Session saved: {session["task"]} [{session["duration"]}]')
         os.remove(self.current_file)
 
+    # ─── Helper Method ────────────────────────────────────────────────
+
     def _save_to_logbook(self, session):
         """
         Append a finished session to the logbook file.
+
+        Args:
+            session (dict): Session data to be saved.
         """
         logs = []
         if os.path.exists(self.all_file):
@@ -77,9 +92,15 @@ class SessionTracker:
         with open(self.all_file, 'w') as f:
             json.dump(logs, f, indent=2)
 
+    # ───────────────────────────────────────────────────────────────────
+
     def export(self, format, output):
         """
         Export saved sessions to CSV or JSON.
+
+        Args:
+            format (str): 'csv' or 'json'.
+            output (str): Output filename or path.
         """
         data = self.get_sessions()
         if not data:
@@ -99,9 +120,17 @@ class SessionTracker:
 
         print(f'{format.upper()} export completed: {output_path}')
 
+    # ─── Helper Methods ────────────────────────────────────────────────
+
     def _confirm_output_path(self, path):
         """
         Check or create output directory; prompt user if missing.
+
+        Args:
+            path (Path): Output file path.
+
+        Returns:
+            bool: True if path is valid, else False.
         """
         if not path.parent.exists():
             confirm = input(f'Directory "{path.parent}" does not exist. Create it? (y/n): ').strip().lower()
@@ -116,6 +145,10 @@ class SessionTracker:
     def _write_csv(self, data, path):
         """
         Write session data to CSV file.
+
+        Args:
+            data (list): List of session dicts.
+            path (Path): Output file path.
         """
         with open(path, 'w', newline='', encoding='utf-8') as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=data[0].keys())
@@ -125,13 +158,20 @@ class SessionTracker:
     def _write_json(self, data, path):
         """
         Write session data to JSON file.
+
+        Args:
+            data (list): List of session dicts.
+            path (Path): Output file path.
         """
         with open(path, 'w', encoding='utf-8') as json_file:
             json.dump(data, json_file, indent=2)
 
     def get_sessions(self):
         """
-        Load sessions from log file; return empty list if missing/corrupted.
+        Load sessions from log file.
+
+        Returns:
+            list: List of session dicts, or empty list if none found.
         """
         if not os.path.exists(self.all_file):
             return []

@@ -1,7 +1,7 @@
 # Kauros local files
 sessions.json
 current_session.json
-design-files/
+
 
 # Ignore IDE/editor config folders
 .idea/                # JetBrains IDEs like PyCharm

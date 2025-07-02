@@ -40,6 +40,7 @@ class TerminalDisplay:
             task = session["task"]
             table.add_row(time, duration, tag, task)
 
+        print()
         self.console.print(table)
 
     def render_weekly_summary(self, sessions):
@@ -87,6 +88,7 @@ class TerminalDisplay:
             row = [tag] + [self._format_minutes(days[day]) for day in weekdays]
             table.add_row(*row)
 
+        print()
         self.console.print(table)
 
     # ─── Helper Methods ────────────────────────────────────────────────

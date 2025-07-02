@@ -9,8 +9,8 @@
 - [Overview](#overview)
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Commands](#commands)
+- [Usage](#usage)
 - [Examples](#examples)
 - [Data Format](#data-format)
 - [Ideas for Future Work](#ideas-for-future-work)
@@ -60,6 +60,17 @@ python kairos.py <command> [options]
 
 ---
 
+## Commands
+
+| Command   | Description                            |
+|---------- |----------------------------------------|
+| `start`   | Start a timer for a task (with optional tag) |
+| `stop`    | Stop current timer and log the session |
+| `summary` | Show daily or weekly summaries         |
+| `export`  | Export session logs to JSON or CSV     |
+
+---
+
 ## Usage
 
 Start tracking a task:
@@ -86,17 +97,6 @@ Export your logs:
 ```bash
 python kairos.py export --format csv --output logs/my_sessions.csv
 ```
-
----
-
-## Commands
-
-| Command   | Description                            |
-|---------- |----------------------------------------|
-| `start`   | Start a timer for a task (with optional tag) |
-| `stop`    | Stop current timer and log the session |
-| `summary` | Show daily or weekly summaries         |
-| `export`  | Export session logs to JSON or CSV     |
 
 ---
 

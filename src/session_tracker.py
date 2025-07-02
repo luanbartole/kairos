@@ -63,10 +63,14 @@ class SessionTracker:
         with open(self.current_file) as f:
             session = json.load(f)
 
-        start_time = datetime.strptime(session['start'], '%H:%M')
-        end_time = datetime.strptime(now.strftime('%H:%M'), '%H:%M')
+        start_datetime = datetime.strptime(f"{session['date']} {session['start']}", "%Y-%m-%d %H:%M")
+        end_datetime = now
 
-        duration = end_time - start_time
+        # Handle potential day rollover (e.g., timer started before midnight, stopped after)
+        if end_datetime < start_datetime:
+            raise ValueError("End time is earlier than start time. Something went wrong.")
+
+        duration = end_datetime - start_datetime
         total_seconds = int(duration.total_seconds())
         hours = total_seconds // 3600
         minutes = (total_seconds % 3600) // 60

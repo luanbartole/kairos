@@ -22,6 +22,8 @@
 
 Kairos is a Python CLI utility for logging your task sessions with start/stop timers, tagging them for later review, and generating clean daily or weekly summaries. It's built to be minimal, readable, and easy to customize or extend.
 
+![summary_today](https://github.com/user-attachments/assets/d9320251-ee41-46e4-b1af-679d805502d9)
+
 ---
 
 ## Features

@@ -30,6 +30,10 @@ class SessionTracker:
         Returns:
             str: Confirmation message.
         """
+
+        if os.path.exists(self.current_file):
+            raise FileExistsError("A time is already running. Stop it first before starting a new one using the 'stop' command.")
+
         now = datetime.now()
         session = {
             'date': now.strftime('%Y-%m-%d'),
